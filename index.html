@@ -11,4 +11,56 @@
     <h1>Bar Chart</h1>
     <canvas id="queue-chart"></canvas>
   </body>
+  <script>
+    // chat gpt has been use to help with the javaScript
+
+    // Function to get a random number of customers between 0 and 32
+    function getNumber0fCustomers() {
+      return Math.floor(Math.random() * 33);
+    }
+
+    // Initialize the queue history with 40 zeroes
+    let queueHistory = Array(40).fill(0);
+
+    // Initialize the current queue size
+    const queueSize = getNumber0fCustomers();
+
+    // Update the queue every second
+    setInterval(() => {
+      // Get the current queue length (an integer between 0 and 32)
+      const currentLength = getNumber0fCustomers();
+
+      // Add it to the queue history
+      queueHistory.shift();
+      queueHistory.push(currentLength);
+
+      // Render the updated bar chart
+      renderQueueChart(queueHistory);
+    }, 1000);
+
+    // Function to render the queue chart
+    function renderQueueChart(queueHistory) {
+      // Get the canvas element and its context
+      const canvas = document.getElementById("queue-chart");
+      const ctx = canvas.getContext("2d");
+
+      // Clear the canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Set the color of the chart to blue
+      ctx.fillStyle = "blue";
+
+      // Calculate the bar width and spacing
+      const barWidth = canvas.width / queueHistory.length;
+      const barSpacing = barWidth * 0.2;
+
+      // Draw each bar
+      for (let i = 0; i < queueHistory.length; i++) {
+        const barHeight = (queueHistory[i] / 32) * canvas.height;
+        const x = i * barWidth + i * barSpacing;
+        const y = canvas.height - barHeight;
+        ctx.fillRect(x, y, barWidth, barHeight);
+      }
+    }
+  </script>
 </html>
